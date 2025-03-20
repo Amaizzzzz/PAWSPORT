@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>宠物旅行 (Pet Travel)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f6f6f6;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: white;
+            height: 100vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status-bar {
+            height: 44px;
+            background-color: #FF9500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .status-bar-icons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .time {
+            font-weight: 600;
+        }
+        
+        .header {
+            padding: 12px 16px;
+            background-color: #FF9500;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .logo img {
+            height: 28px;
+            margin-right: 8px;
+        }
+        
+        .language-toggle {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 4px 8px;
+            border-radius: 16px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .hero {
+            padding: 24px 16px;
+            background: linear-gradient(to bottom, #FF9500, #FF8200);
+            color: white;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .hero p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .search-bar {
+            padding: 16px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 24px;
+            border: none;
+            background-color: #f6f6f6;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .icon {
+            width: 20px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            color: white;
+        }
+        
+        .section {
+            padding: 20px 16px;
+            border-bottom: 8px solid #f6f6f6;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .see-all {
+            color: #FF9500;
+            font-size: 14px;
+        }
+        
+        .option-cards {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 12px;
+        }
+        
+        .option-card {
+            flex: 0 0 120px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .option-img {
+            height: 80px;
+            background-color: #eee;
+        }
+        
+        .option-content {
+            padding: 8px;
+            background: white;
+        }
+        
+        .option-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .routes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .route-card {
+            padding: 16px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .route-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .route-name {
+            font-weight: 600;
+        }
+        
+        .route-details {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .route-airports {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .airport-code {
+            font-weight: 600;
+        }
+        
+        .route-line {
+            flex: 1;
+            height: 2px;
+            background-color: #ddd;
+            margin: 0 4px;
+            position: relative;
+        }
+        
+        .route-line::after {
+            content: '✈️';
+            position: absolute;
+            top: -9px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+        }
+        
+        .pet-requirements {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 414px;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .nav-icon {
+            margin-bottom: 4px;
+            width: 24px;
+            height: 24px;
+            background-color: #eee;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .active {
+            color: #FF9500;
+        }
+        
+        .active .nav-icon {
+            background-color: #FF9500;
+            color: white;
+        }
+        
+        /* Language specific */
+        [lang="en"] {
+            display: none;
+        }
+        
+        /* Change this to display: none to switch to Chinese */
+        [lang="zh-CN"] {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="status-bar-icons">
+                <div>📶</div>
+                <div>📶</div>
+                <div>🔋</div>
+            </div>
+        </div>
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div>🐾</div>
+                <div lang="zh-CN">宠物旅行</div>
+                <div lang="en">Pet Travel</div>
+            </div>
+            <div class="language-toggle" onclick="toggleLanguage()">EN / 中文</div>
+        </div>
+        
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1 lang="zh-CN">与爱宠一起旅行</h1>
+            <h1 lang="en">Travel with Your Pet</h1>
+            <p lang="zh-CN">轻松了解航空旅行宠物要求</p>
+            <p lang="en">Easily understand pet requirements for air travel</p>
+        </div>
+        
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <div class="search-input">
+                <div class="icon">🔍</div>
+                <div lang="zh-CN">搜索目的地或航空公司...</div>
+                <div lang="en">Search destinations or airlines...</div>
+            </div>
+        </div>
+        
+        <!-- Popular Routes Section -->
+        <div class="section">
+            <div class="section-title">
+                <div lang="zh-CN">热门航线</div>
+                <div lang="en">Popular Routes</div>
+                <div class="see-all" lang="zh-CN">查看全部</div>
+                <div class="see-all" lang="en">See All</div>
+            </div>
+            <div class="routes-list">
+                <div class="route-card">
+                    <div class="route-header">
+                        <div class="route-name" lang="zh-CN">北京 → 上海</div>
+                        <div class="route-name" lang="en">Beijing → Shanghai</div>
+                        <div class="pet-status" style="color: #4CAF50;">✓</div>
+                    </div>
+                    <div class="route-details">
+                        <div class="route-airports">
+                            <div class="airport-code">PEK</div>
+                            <div class="route-line"></div>
+                            <div class="airport-code">SHA</div>
+                        </div>
+                        <div class="pet-requirements" lang="zh-CN">小型宠物可携带</div>
+                        <div class="pet-requirements" lang="en">Small pets allowed</div>
+                    </div>
+                </div>
+                
+                <div class="route-card">
+                    <div class="route-header">
+                        <div class="route-name" lang="zh-CN">上海 → 洛杉矶</div>
+                        <div class="route-name" lang="en">Shanghai → Los Angeles</div>
+                        <div class="pet-status" style="color: #FF9800;">!</div>
+                    </div>
+                    <div class="route-details">
+                        <div class="route-airports">
+                            <div class="airport-code">PVG</div>
+                            <div class="route-line"></div>
+                            <div class="airport-code">LAX</div>
+                        </div>
+                        <div class="pet-requirements" lang="zh-CN">需提前30天申请</div>
+                        <div class="pet-requirements" lang="en">Apply 30 days in advance</div>
+                    </div>
+                </div>
+                
+                <div class="route-card">
+                    <div class="route-header">
+                        <div class="route-name" lang="zh-CN">广州 → 成都</div>
+                        <div class="route-name" lang="en">Guangzhou → Chengdu</div>
+                        <div class="pet-status" style="color: #4CAF50;">✓</div>
+                    </div>
+                    <div class="route-details">
+                        <div class="route-airports">
+                            <div class="airport-code">CAN</div>
+                            <div class="route-line"></div>
+                            <div class="airport-code">CTU</div>
+                        </div>
+                        <div class="pet-requirements" lang="zh-CN">需健康证明</div>
+                        <div class="pet-requirements" lang="en">Health certificate required</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pet Types Section -->
+        <div class="section">
+            <div class="section-title">
+                <div lang="zh-CN">按宠物类型</div>
+                <div lang="en">By Pet Type</div>
+                <div class="see-all" lang="zh-CN">查看全部</div>
+                <div class="see-all" lang="en">See All</div>
+            </div>
+            <div class="option-cards">
+                <div class="option-card">
+                    <div class="option-img" style="background-image: url('/api/placeholder/120/80'); background-size: cover;"></div>
+                    <div class="option-content">
+                        <div class="option-title" lang="zh-CN">小型犬</div>
+                        <div class="option-title" lang="en">Small Dogs</div>
+                    </div>
+                </div>
+                
+                <div class="option-card">
+                    <div class="option-img" style="background-image: url('/api/placeholder/120/80'); background-size: cover;"></div>
+                    <div class="option-content">
+                        <div class="option-title" lang="zh-CN">猫</div>
+                        <div class="option-title" lang="en">Cats</div>
+                    </div>
+                </div>
+                
+                <div class="option-card">
+                    <div class="option-img" style="background-image: url('/api/placeholder/120/80'); background-size: cover;"></div>
+                    <div class="option-content">
+                        <div class="option-title" lang="zh-CN">大型犬</div>
+                        <div class="option-title" lang="en">Large Dogs</div>
+                    </div>
+                </div>
+                
+                <div class="option-card">
+                    <div class="option-img" style="background-image: url('/api/placeholder/120/80'); background-size: cover;"></div>
+                    <div class="option-content">
+                        <div class="option-title" lang="zh-CN">其他宠物</div>
+                        <div class="option-title" lang="en">Other Pets</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Airlines Section -->
+        <div class="section">
+            <div class="section-title">
+                <div lang="zh-CN">航空公司政策</div>
+                <div lang="en">Airline Policies</div>
+                <div class="see-all" lang="zh-CN">查看全部</div>
+                <div class="see-all" lang="en">See All</div>
+            </div>
+            <div class="option-cards">
+                <div class="option-card">
+                    <div class="option-img" style="background-image: url('/api/placeholder/120/80'); background-size: cover;"></div>
+                    <div class="option-content">
+                        <div class="option-title" lang="zh-CN">中国国航</div>
+                        <div class="option-title" lang="en">Air China</div>
+                    </div>
+                </div>
+                
+                <div class="option-card">
+                    <div class="option-img" style="background-image: url('/api/placeholder/120/80'); background-size: cover;"></div>
+                    <div class="option-content">
+                        <div class="option-title" lang="zh-CN">东方航空</div>
+                        <div class="option-title" lang="en">China Eastern</div>
+                    </div>
+                </div>
+                
+                <div class="option-card">
+                    <div class="option-img" style="background-image: url('/api/placeholder/120/80'); background-size: cover;"></div>
+                    <div class="option-content">
+                        <div class="option-title" lang="zh-CN">南方航空</div>
+                        <div class="option-title" lang="en">China Southern</div>
+                    </div>
+                </div>
+                
+                <div class="option-card">
+                    <div class="option-img" style="background-image: url('/api/placeholder/120/80'); background-size: cover;"></div>
+                    <div class="option-content">
+                        <div class="option-title" lang="zh-CN">国际航空</div>
+                        <div class="option-title" lang="en">International</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation Footer -->
+        <div class="footer">
+            <div class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                <div lang="zh-CN">首页</div>
+                <div lang="en">Home</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">🔍</div>
+                <div lang="zh-CN">搜索</div>
+                <div lang="en">Search</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📋</div>
+                <div lang="zh-CN">要求</div>
+                <div lang="en">Requirements</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div lang="zh-CN">我的</div>
+                <div lang="en">Profile</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleLanguage() {
+            const zhElements = document.querySelectorAll('[lang="zh-CN"]');
+            const enElements = document.querySelectorAll('[lang="en"]');
+            
+            const currentZhDisplay = window.getComputedStyle(zhElements[0]).display;
+            
+            zhElements.forEach(el => {
+                el.style.display = currentZhDisplay === 'none' ? 'block' : 'none';
+            });
+            
+            enElements.forEach(el => {
+                el.style.display = currentZhDisplay === 'none' ? 'none' : 'block';
+            });
+        }
+    </script>
+</body>
+</html>
